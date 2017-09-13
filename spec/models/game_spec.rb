@@ -71,5 +71,59 @@ RSpec.describe Game, type: :model do
       expect(game_w_questions.status).to eq(:in_progress)
       expect(game_w_questions.finished?).to be_falsey
     end
+
+    it 'check .take_money!' do
+      q = game_w_questions.current_game_question
+      game_w_questions.answer_current_question!(q.correct_answer_key)
+
+      game_w_questions.take_money!
+
+      prize = game_w_questions.prize
+
+      expect(prize).to be > 0
+
+      expect(game_w_questions.status).to eq :money
+      expect(game_w_questions.finished?).to be_truthy
+      expect(user.balance).to eq prize
+    end
+  end
+
+  context 'game status' do
+    it ':in_progress' do
+      expect(game_w_questions.status).to eq :in_progress
+    end
+
+    it ':fail' do
+      q = game_w_questions.current_game_question
+      game_w_questions.answer_current_question!(q.a)
+
+      expect(game_w_questions.status).to eq :fail
+    end
+
+    it ':won' do
+      15.times do
+        q = game_w_questions.current_game_question
+        game_w_questions.answer_current_question!(q.correct_answer_key)
+      end
+
+      expect(game_w_questions.status).to eq :won
+    end
+
+    it ':money' do
+      q = game_w_questions.current_game_question
+      game_w_questions.answer_current_question!(q.correct_answer_key)
+
+      game_w_questions.take_money!
+
+      expect(game_w_questions.status).to eq :money
+    end
+
+    it ':timeout' do
+      game_w_questions.finished_at = Time.now
+      game_w_questions.created_at = 1.hour.ago
+      game_w_questions.is_failed = true
+
+      expect(game_w_questions.status).to eq :timeout
+    end
   end
 end
