@@ -126,4 +126,31 @@ RSpec.describe Game, type: :model do
       expect(game_w_questions.status).to eq :timeout
     end
   end
+
+  describe '#current_game_question' do
+    it 'should be third question' do
+      game_w_questions.current_level = 2
+      q = game_w_questions.game_questions.detect { |q| q.question.level == 2 }
+      expect(game_w_questions.current_game_question).to eq q
+    end
+  end
+
+  describe '#previous_level' do
+    context 'When new game' do
+      it 'should be -1' do
+        expect(game_w_questions.previous_level).to eq -1
+      end
+    end
+
+    context 'When 3 questions passed' do
+      it 'should be 2' do
+        3.times do
+          q = game_w_questions.current_game_question
+          game_w_questions.answer_current_question!(q.correct_answer_key)
+        end
+
+        expect(game_w_questions.previous_level).to eq 2
+      end
+    end
+  end
 end
