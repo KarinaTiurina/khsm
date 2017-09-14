@@ -153,4 +153,40 @@ RSpec.describe Game, type: :model do
       end
     end
   end
+
+  describe '#answer_current_question!' do
+    context 'When correct answer' do
+      it 'should be true' do
+        q = game_w_questions.current_game_question
+        expect(game_w_questions.answer_current_question!(q.correct_answer_key)).to be_truthy
+      end
+    end
+
+    context 'When last question' do
+      it 'should be true' do
+        game_w_questions.current_level = Question::QUESTION_LEVELS.max
+
+        q = game_w_questions.current_game_question
+        expect(game_w_questions.answer_current_question!(q.correct_answer_key)).to be_truthy
+        expect(game_w_questions.current_level).to eq Question::QUESTION_LEVELS.max + 1
+        expect(game_w_questions.prize).to eq 1000000
+      end
+    end
+
+    context 'When wrong answer' do
+      it 'should be false' do
+        q = game_w_questions.current_game_question
+        wrong_answer = q.correct_answer_key == 'a' ? 'b' : 'a'
+        expect(game_w_questions.answer_current_question!(wrong_answer)).to be_falsey
+      end
+    end
+
+    context 'When timeout' do
+      it 'should be false' do
+        game_w_questions.created_at = 1.hour.ago
+        q = game_w_questions.current_game_question
+        expect(game_w_questions.answer_current_question!(q.correct_answer_key)).to be_falsey
+      end
+    end
+  end
 end
