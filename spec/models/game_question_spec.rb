@@ -30,13 +30,34 @@ RSpec.describe GameQuestion, type: :model do
     end
   end
 
-  context 'correct .text & .level delegates' do
+  describe '#text & #level delegates' do
     it 'check text' do
       expect(game_question.text).to eq game_question.question.text
     end
 
     it 'check level' do
       expect(game_question.level).to eq game_question.question.level
+    end
+  end
+
+  describe '#correct_answer_key' do
+    it 'should be "a"' do
+      game_question.a, game_question.b = game_question.b, game_question.a
+      expect(game_question.correct_answer_key).to eq "a"
+    end
+
+    it 'should be "b"' do
+      expect(game_question.correct_answer_key).to eq "b"
+    end
+
+    it 'should be "c"' do
+      game_question.c, game_question.b = game_question.b, game_question.c
+      expect(game_question.correct_answer_key).to eq "c"
+    end
+
+    it 'should be "d"' do
+      game_question.d, game_question.b = game_question.b, game_question.d
+      expect(game_question.correct_answer_key).to eq "d"
     end
   end
 end
