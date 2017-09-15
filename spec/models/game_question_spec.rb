@@ -49,15 +49,5 @@ RSpec.describe GameQuestion, type: :model do
     it 'should be "b"' do
       expect(game_question.correct_answer_key).to eq "b"
     end
-
-    it 'should be "c"' do
-      game_question.c, game_question.b = game_question.b, game_question.c
-      expect(game_question.correct_answer_key).to eq "c"
-    end
-
-    it 'should be "d"' do
-      game_question.d, game_question.b = game_question.b, game_question.d
-      expect(game_question.correct_answer_key).to eq "d"
-    end
   end
 end
