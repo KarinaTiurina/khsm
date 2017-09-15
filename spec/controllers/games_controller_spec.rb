@@ -49,6 +49,18 @@ RSpec.describe GamesController, type: :controller do
       expect(response).to render_template('show')
     end
 
+    context "When try to #show alien game" do
+      it 'redirect to root' do
+        alien_game = FactoryGirl.create(:game)
+
+        get :show, id: alien_game.id
+
+        expect(response.status).to_not eq 200
+        expect(response).to redirect_to(root_path)
+        expect(flash[:alert]).to be
+      end
+    end
+
     it 'answer correct' do
       put :answer,
           id: game_w_questions.id,
