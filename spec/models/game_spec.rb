@@ -130,7 +130,7 @@ RSpec.describe Game, type: :model do
   describe '#current_game_question' do
     it 'should be third question' do
       game_w_questions.current_level = 2
-      q = game_w_questions.game_questions.detect { |q| q.question.level == 2 }
+      q = game_w_questions.game_questions[2]
       expect(game_w_questions.current_game_question).to eq q
     end
   end
