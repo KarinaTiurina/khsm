@@ -93,5 +93,20 @@ RSpec.describe GamesController, type: :controller do
         expect(user.balance).to eq 200
       end
     end
+
+    context 'When try to create second game' do
+      it 'should redirect to the first game' do
+        expect(game_w_questions.finished?).to be_falsey
+
+        expect { post :create }.to change(Game, :count).by(0)
+
+        game = assigns(:game)
+
+        expect(game).to be_nil
+
+        expect(response).to redirect_to(game_path(game_w_questions))
+        expect(flash[:alert]).to be
+      end
+    end
   end
 end
