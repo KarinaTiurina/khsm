@@ -80,7 +80,7 @@ RSpec.describe GameQuestion, type: :model do
   end
 
   describe '#add_fifty_fifty' do 
-    it 'should add correct keys' do 
+    it 'should add :fifty_fifty' do 
       expect(game_question.help_hash).not_to include(:fifty_fifty)      
 
       expect(game_question.add_fifty_fifty).to be_truthy
@@ -90,9 +90,25 @@ RSpec.describe GameQuestion, type: :model do
       expect(gq.help_hash).to include(:fifty_fifty)
 
       ff = gq.help_hash[:fifty_fifty]
-      
+
       expect(ff).to include 'b'
       expect(ff.size).to eq 2
+    end
+  end
+
+  describe '#add_friend_call' do 
+    it 'should add :friend_call' do 
+      expect(game_question.help_hash).not_to include :friend_call
+
+      expect(game_question.add_friend_call).to be_truthy
+
+      gq = GameQuestion.find(game_question.id)
+
+      expect(gq.help_hash).to include :friend_call
+
+      f_c = gq.help_hash[:friend_call]
+
+      expect(f_c.class).to eq String
     end
   end
 end
