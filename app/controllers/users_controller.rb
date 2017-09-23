@@ -9,6 +9,7 @@ class UsersController < ApplicationController
   end
 
   def show
+  	@games = @user.games.order(created_at: :desc)
   end
 
   private

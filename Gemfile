@@ -21,6 +21,11 @@ group :development, :test do
   gem 'shoulda-matchers'
 end
 
+group :test do
+  gem 'capybara'
+  gem 'launchy'
+end
+
 group :production do
   # гем, улучшающий вывод логов на Heroku
   # https://devcenter.heroku.com/articles/getting-started-with-rails4#heroku-gems
